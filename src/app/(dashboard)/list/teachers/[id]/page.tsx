@@ -80,9 +80,9 @@ const SingleTeacherPage = () => {
                 <div className="mt-4 flex flex-wrap text-xs text-gray-500 gap-4">
                     <Link className="p-3 rounded-md bg-lamaSkyLight" href="/">Teacher's Classes</Link>
                     <Link className="p-3 rounded-md bg-lamaPurpleLight" href="/">Teacher's Students</Link>
+                    <Link className="p-3 rounded-md bg-lamaYellowLight" href="/">Teacher's Lessons</Link>
                     <Link className="p-3 rounded-md bg-pink-50" href="/">Teacher's Exams</Link>
                     <Link className="p-3 rounded-md bg-lamaSkyLight" href="/">Teacher's Assignments</Link>
-                    <Link className="p-3 rounded-md bg-lamaYellowLight" href="/">Teacher's Results</Link>
                 </div>
             </div>
             <Performance />
