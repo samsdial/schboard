@@ -1,9 +1,9 @@
+import FormModal from "@/components/FormModal"
 import Pagination from "@/components/Pagination"
 import Table from "@/components/Table"
 import TableSearch from "@/components/TableSearch"
 import { eventsData, role } from "@/lib/data"
 import Image from "next/image"
-import Link from "next/link"
 
 type Event = {
   id: number,
@@ -36,15 +36,19 @@ const EventList = () => {
         <td className="hidden md:table-cell">{item.endTime}</td> 
         <td>
           <div className="flex items-center gap-2">
-            <Link href={`/list/teachers/${item.id}`}>
+            {/* <Link href={`/list/teachers/${item.id}`}>
               <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky">
                 <Image src="/edit.png" width={14} height={14} alt="edit" />
               </button>
             </Link>
-            {role === "admin" &&(
               <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
                 <Image src="/delete.png" width={14} height={14} alt="delete" />
-              </button>
+              </button> */}
+            {role === "admin" &&(
+              <>
+                <FormModal table="event" type="update" data={item} />
+                <FormModal table="event" type="delete" id={item.id} />
+            </>
             )}
           </div>
         </td>
@@ -65,9 +69,10 @@ const EventList = () => {
               <Image src="/sort.png" width={14} height={14} alt="sort" />
             </button>
             {role === "admin" &&(
-              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                <Image src="/plus.png" width={14} height={14} alt="plus" />
-              </button>
+              // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+              //   <Image src="/plus.png" width={14} height={14} alt="plus" />
+              // </button>
+              <FormModal table="event" type="create" />
             )}
           </div>
         </div>

@@ -1,9 +1,9 @@
+import FormModal from "@/components/FormModal"
 import Pagination from "@/components/Pagination"
 import Table from "@/components/Table"
 import TableSearch from "@/components/TableSearch"
 import { assignmentsData, role } from "@/lib/data"
 import Image from "next/image"
-import Link from "next/link"
 
 type Assignment = {
   id: number,
@@ -33,15 +33,19 @@ const AssignmentsList = () => {
         <td className="hidden md:table-cell">{item.dueDate}</td> 
         <td>
           <div className="flex items-center gap-2">
-            <Link href={`/list/teachers/${item.id}`}>
+            {/* <Link href={`/list/teachers/${item.id}`}>
               <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky">
                 <Image src="/edit.png" width={14} height={14} alt="edit" />
               </button>
             </Link>
-            {role === "admin" &&(
               <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
                 <Image src="/delete.png" width={14} height={14} alt="delete" />
-              </button>
+              </button> */}
+            {role === "admin" &&(
+              <>
+                <FormModal table="parent" type="update" data={item} />
+                <FormModal table="parent" type="delete" id={item.id} />
+              </>
             )}
           </div>
         </td>
