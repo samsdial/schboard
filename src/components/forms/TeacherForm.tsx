@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import InputField from "../InputField";
 
 interface TeacherFormProps {
     type: "create" | "update";
@@ -22,18 +23,53 @@ const schema = z.object({
     img: z.instanceof(File, {message:'Image is required!'}),
 });
 
+type Input = z.infer<typeof schema>;
+
 const TeacherForm: React.FC<TeacherFormProps> = ({type, data}) => {
-  const {register, handleSubmit, formState: {errors}} = useForm({
+  const {register, handleSubmit, formState: {errors}} = useForm<Input>({
     resolver: zodResolver(schema),
   });
+  const onSubmit = handleSubmit(data => {
+    console.log(data);
+  });
   return (
-    <form className="flex flex-col gap-8">
+    <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
         {type === "create" ? "Create Teacher" : "Update Teacher"}
       </h1>
-      <span className="text-xs text-gray-400 font-medium">Authentication Information</span>
-      <input type="text" {...register("username")} className="w-full ring-[1.5px] ring-gray-300 p-2 rounded-md bg-transparent" placeholder="Username" />
-      <span className="text-xs text-gray-400 font-medium">Personal Information</span>
+      <span className="text-xs text-gray-400 font-medium">
+        Authentication Information
+      </span>
+      <InputField
+        label="Username"
+        name="username"
+        defaultValue={data?.username}
+        error={errors.username}
+        register={register}
+      />
+      <InputField
+        label="Email"
+        name="email"
+        type="email"
+        defaultValue={data?.email}
+        error={errors.email}
+        register={register}
+      />
+      <InputField
+        label="Password"
+        name="password"
+        type="password"
+        defaultValue={data?.password}
+        error={errors.password}
+        register={register}
+      />
+
+      <span className="text-xs text-gray-400 font-medium">
+        Personal Information
+      </span>
+      <button className="bg-blue-400 text-white p-2 rounded-md">
+        {type === "create" ? "Create" : "Update"}
+      </button>
     </form>
   );
 }
