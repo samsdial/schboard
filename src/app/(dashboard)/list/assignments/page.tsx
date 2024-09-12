@@ -66,9 +66,10 @@ const AssignmentsList = () => {
               <Image src="/sort.png" width={14} height={14} alt="sort" />
             </button>
             {role === "admin" &&(
-              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                <Image src="/plus.png" width={14} height={14} alt="plus" />
-              </button>
+              // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+              //   <Image src="/plus.png" width={14} height={14} alt="plus" />
+              // </button>
+              <FormModal table="assignment" type="create" />
             )}
           </div>
         </div>
