@@ -14,7 +14,7 @@ interface InputFieldProps {
 const InputField: React.FC<InputFieldProps> = ({label, type = "text", register, name, defaultValue, error, inputProps}) => { 
 
   return (
-    <div className="flex flex-col gap-2 w-full md:w-1/4">
+    <div className="flex flex-col gap-2 pb-2 w-full justify-center h-50">
       <label htmlFor="username" className="text-xs text-gray-500">
         {label}
       </label>

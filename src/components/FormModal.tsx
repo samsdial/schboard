@@ -1,10 +1,20 @@
 "use client"
 
+import dynamic from "next/dynamic";
+//import { useState } from "react";
 import Image from "next/image";
 import { useState } from "react";
-import TeacherForm from "./forms/TeacherForm";
+// import StudentForm from "./forms/StudentForm";
+// import TeacherForm from "./forms/TeacherForm";
 
-//import { useState } from "react";
+const TeacherForm = dynamic(() => import("./forms/TeacherForm"), { 
+  loading: () => <div>Loading...</div>,
+ });
+const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+  loading: () => <div>Loading...</div>,
+ });
+ const ParentForm = dynamic(() => import("./forms/ParentForm"));
+  
 
 interface FormModalProps {
     table: | "teacher" | "student" | "parent" | "subject" | "class" | "lesson" | "exam" | "assignment" | "result" | "event" | "announcement"; 
@@ -12,6 +22,14 @@ interface FormModalProps {
     data?: any;
     id?: number;
 }
+
+const forms: {
+  [key: string]: (type: "create" | "update", data: any) => JSX.Element;
+}={
+  teacher: (type, data) => <TeacherForm type={type} data={data} />,
+  student: (type, data) => <StudentForm type={type} data={data} />,
+  parent: (type, data) => <ParentForm type={type} data={data} />,
+};
 
 const FormModal: React.FC<FormModalProps> = ({table, type, data, id}) => {
     const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
@@ -29,9 +47,9 @@ const FormModal: React.FC<FormModalProps> = ({table, type, data, id}) => {
           <span className="text-center font-medium">Are you sure you want to delete this {table}?</span>
           <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center">Delete</button>
         </form>
-        ) : (
-          <TeacherForm type="create" data={data} />
-        )
+        ) : type === "create" || type === "update" ? (
+          forms[table](type, data)
+        ): "Form not found"
     }
     
     return (

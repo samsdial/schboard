@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import InputField from "../InputField";
 
-interface TeacherFormProps {
+interface StudentFormProps {
     type: "create" | "update";
     data: any;
 }
@@ -27,7 +27,7 @@ const schema = z.object({
 
 type Input = z.infer<typeof schema>;
 
-const TeacherForm: React.FC<TeacherFormProps> = ({type, data}) => {
+const StudentForm: React.FC<StudentFormProps> = ({type, data}) => {
   const {register, handleSubmit, formState: {errors}} = useForm<Input>({
     resolver: zodResolver(schema),
   });
@@ -37,7 +37,7 @@ const TeacherForm: React.FC<TeacherFormProps> = ({type, data}) => {
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Create Teacher" : "Update Teacher"}
+        {type === "create" ? "Create student" : "Update student"}
       </h1>
       <div className="overflow-y-scroll h-96 p-2">
         <span className="text-xs text-gray-400 font-medium">
@@ -137,4 +137,4 @@ const TeacherForm: React.FC<TeacherFormProps> = ({type, data}) => {
   );
 }
 
-export default TeacherForm
+export default StudentForm
