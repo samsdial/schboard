@@ -3,40 +3,59 @@ const prisma = new PrismaClient();
 
 async function main() {
   // ADMIN
-  await prisma.admin.create({
-    data: {
-      id: "admin1",
-      username: "admin1",
-    },
-  });
-  await prisma.admin.create({
-    data: {
-      id: "admin2",
-      username: "admin2",
-    },
+  await prisma.admin.deleteMany();
+  await prisma.admin.createMany({
+    data: [
+      { id: "admin1", username: "admin1" },
+      { id: "admin2", username: "admin2" },
+    ],
   });
 
   // GRADE
+  await prisma.grade.deleteMany();
   for (let i = 1; i <= 6; i++) {
     await prisma.grade.create({
+      data: { level: i },
+    });
+  }
+
+  // TEACHER
+  await prisma.teacher.deleteMany();
+  for (let i = 1; i <= 15; i++) {
+    await prisma.teacher.create({
       data: {
-        level: i,
+        id: `teacher${i}`, // Unique ID for the teacher
+        username: `teacher${i}`,
+        name: `TName${i}`,
+        surname: `TSurname${i}`,
+        email: `teacher${i}@example.com`,
+        phone: `123-456-789${i}`,
+        address: `Address${i}`,
+        bloodType: "A+",
+        sex: i % 2 === 0 ? UserSex.MALE : UserSex.FEMALE,
+        birthday: new Date(
+          new Date().setFullYear(new Date().getFullYear() - 30)
+        ),
       },
     });
   }
 
   // CLASS
+  await prisma.class.deleteMany();
   for (let i = 1; i <= 6; i++) {
+    const supervisor = await prisma.teacher.findFirst(); // Encuentra un profesor como supervisor
     await prisma.class.create({
       data: {
         name: `${i}A`,
         gradeId: i,
         capacity: Math.floor(Math.random() * (20 - 15 + 1)) + 15,
+        supervisorId: supervisor?.id || null,
       },
     });
   }
 
   // SUBJECT
+  await prisma.subject.deleteMany();
   const subjectData = [
     { name: "Mathematics" },
     { name: "Science" },
@@ -50,33 +69,12 @@ async function main() {
     { name: "Art" },
   ];
 
-  for (const subject of subjectData) {
-    await prisma.subject.create({ data: subject });
-  }
-
-  // TEACHER
-  for (let i = 1; i <= 15; i++) {
-    await prisma.teacher.create({
-      data: {
-        id: `teacher${i}`, // Unique ID for the teacher
-        username: `teacher${i}`,
-        name: `TName${i}`,
-        surname: `TSurname${i}`,
-        email: `teacher${i}@example.com`,
-        phone: `123-456-789${i}`,
-        address: `Address${i}`,
-        bloodType: "A+",
-        sex: i % 2 === 0 ? UserSex.MALE : UserSex.FEMALE,
-        subjects: { connect: [{ id: (i % 10) + 1 }] },
-        classes: { connect: [{ id: (i % 6) + 1 }] },
-        birthday: new Date(
-          new Date().setFullYear(new Date().getFullYear() - 30)
-        ),
-      },
-    });
-  }
+  await prisma.subject.createMany({
+    data: subjectData,
+  });
 
   // LESSON
+  await prisma.lesson.deleteMany();
   for (let i = 1; i <= 30; i++) {
     await prisma.lesson.create({
       data: {
@@ -96,6 +94,7 @@ async function main() {
   }
 
   // PARENT
+  await prisma.parent.deleteMany();
   for (let i = 1; i <= 25; i++) {
     await prisma.parent.create({
       data: {
@@ -111,19 +110,20 @@ async function main() {
   }
 
   // STUDENT
+  await prisma.student.deleteMany();
   for (let i = 1; i <= 50; i++) {
     await prisma.student.create({
       data: {
         id: `student${i}`,
         username: `student${i}`,
         name: `SName${i}`,
-        surname: `SSurname ${i}`,
+        surname: `SSurname${i}`,
         email: `student${i}@example.com`,
         phone: `987-654-321${i}`,
         address: `Address${i}`,
         bloodType: "O-",
         sex: i % 2 === 0 ? UserSex.MALE : UserSex.FEMALE,
-        parentId: `parentId${Math.ceil(i / 2) % 25 || 25}`,
+        parentId: `parentId${Math.ceil(i / 2)}`,
         gradeId: (i % 6) + 1,
         classId: (i % 6) + 1,
         birthday: new Date(
@@ -134,6 +134,7 @@ async function main() {
   }
 
   // EXAM
+  await prisma.exam.deleteMany();
   for (let i = 1; i <= 10; i++) {
     await prisma.exam.create({
       data: {
@@ -146,6 +147,7 @@ async function main() {
   }
 
   // ASSIGNMENT
+  await prisma.assignment.deleteMany();
   for (let i = 1; i <= 10; i++) {
     await prisma.assignment.create({
       data: {
@@ -158,6 +160,7 @@ async function main() {
   }
 
   // RESULT
+  await prisma.result.deleteMany();
   for (let i = 1; i <= 10; i++) {
     await prisma.result.create({
       data: {
@@ -169,6 +172,7 @@ async function main() {
   }
 
   // ATTENDANCE
+  await prisma.attendance.deleteMany();
   for (let i = 1; i <= 10; i++) {
     await prisma.attendance.create({
       data: {
@@ -181,6 +185,7 @@ async function main() {
   }
 
   // EVENT
+  await prisma.event.deleteMany();
   for (let i = 1; i <= 5; i++) {
     await prisma.event.create({
       data: {
@@ -194,6 +199,7 @@ async function main() {
   }
 
   // ANNOUNCEMENT
+  await prisma.announcement.deleteMany();
   for (let i = 1; i <= 5; i++) {
     await prisma.announcement.create({
       data: {
